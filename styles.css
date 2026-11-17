@@ -14,7 +14,7 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 88px; }
-body { margin: 0; overflow-x: clip; background: var(--cream); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+body { margin: 0; overflow-x: clip; font-variant-emoji: text; background: var(--cream); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; }
 a { color: inherit; }
 button { font: inherit; }
 .container { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
@@ -70,6 +70,10 @@ h1 em, h2 em { color: var(--violet); font-family: var(--hand); font-size: 1.16em
 .orbit-sticker > span { font-size: 34px; animation: spin 9s linear infinite reverse; }
 .sun-doodle { position: absolute; top: 14%; left: 2%; color: var(--violet); font-size: 46px; animation: spin 18s linear infinite; }
 .hand-note { position: absolute; right: 4%; bottom: 22%; color: var(--violet); font-family: var(--hand); font-size: 28px; transform: rotate(-10deg); }
+/* On phones the note sits next to "good" instead of floating over the intro */
+.hero-title { position: relative; }
+.hand-note-mobile { display: none; pointer-events: none; }
+.motion .is-visible .hand-note-mobile { animation: pop .8s var(--ease-spring) .9s both; }
 .sparkle { position: absolute; color: var(--pink); animation: twinkle-s 3s ease-in-out infinite; }
 .sparkle-one { top: 55%; left: 6%; font-size: 30px; }
 .sparkle-two { top: 34%; right: 9%; font-size: 36px; color: var(--violet); animation-delay: -1s; }
@@ -305,14 +309,16 @@ h1 em, h2 em { color: var(--violet); font-family: var(--hand); font-size: 1.16em
 }
 @media (max-width: 600px) {
   html { scroll-padding-top: 68px; }
-  .container { width: calc(100% - 36px); }
+  .container { width: calc(100% - 48px); }
   .section-pad { padding-block: 66px; }
   .hero { padding-top: 35px; padding-bottom: 27px; }
   .hero-grid { min-height: 0; padding-top: 70px; }
   .orbit-sticker { width: 78px; height: 78px; right: -4px; }
   .orbit-sticker > span { font-size: 22px; }
-  .hand-note { right: 0; bottom: 30%; font-size: 20px; }
-  .sparkle-two { top: 46%; right: 0; font-size: 26px; }
+  .hero-decor .hand-note { display: none; }
+  .hand-note-mobile { display: block; right: -2px; bottom: 2px; max-width: 76px; font-size: 19px; line-height: .95; text-align: center; }
+  .sparkle-one { display: none; }
+  .sparkle-two { top: 27%; right: 0; font-size: 24px; }
   .sparkle-three { bottom: 2%; left: 6%; }
   .sparkle-four { top: 10%; left: 6%; }
   .hero-copy { padding: 10px 0 0; }
@@ -326,7 +332,6 @@ h1 em, h2 em { color: var(--violet); font-family: var(--hand); font-size: 1.16em
   .hero-chips .chip-feature { padding: 8px 12px 8px 26px; font-size: 11px; }
   .hero-chips .chip-feature::before { left: 10px; }
   .sun-doodle { top: 2%; left: 30%; font-size: 30px; }
-  .sparkle-one { top: 60%; left: 0; font-size: 21px; }
   .hero-bottom { margin-top: 2px; font-size: 8px; }
   .marquee { padding-block: 10px; }
   .marquee-track span { font-size: 17px; }
@@ -334,7 +339,7 @@ h1 em, h2 em { color: var(--violet); font-family: var(--hand); font-size: 1.16em
   .section-heading h2 { font-size: clamp(48px, 14vw, 66px); }
   .section-heading > p { max-width: 350px; margin-top: 14px; font-size: 13px; }
   .project-grid { grid-template-columns: 1fr; gap: 18px; }
-  .project-visual { height: 255px; }
+  .project-visual { height: auto; aspect-ratio: 16 / 9; }
   .project-info { min-height: 176px; padding: 19px 19px 22px; }
   .project-info h3 { font-size: 25px; }
   .project-info p { padding-right: 39px; font-size: 12px; }
@@ -346,19 +351,18 @@ h1 em, h2 em { color: var(--violet); font-family: var(--hand); font-size: 1.16em
   .about-copy > p:not(.eyebrow) { font-size: 14px; }
   .about-paper { width: 70%; min-height: 240px; }
   .about-pink-shape { height: 240px; }
-  .process-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .process-card { min-height: 206px; padding: 15px 13px; }
-  .process-card:last-child { grid-column: span 2; min-height: auto; }
+  .process-grid { grid-template-columns: 1fr; gap: 12px; }
+  .process-card { min-height: auto; padding: 18px 18px 20px; }
   .step-icon { margin-top: 17px; }
   .process-card h3 { font-size: 17px; }
-  .process-card p { font-size: 11px; }
+  .process-card p { font-size: 13px; }
   .tools-grid { grid-template-columns: 1fr; gap: 12px; }
   .tool-card { min-height: auto; padding: 21px; }
   .tool-list { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .contact-section { padding-block: 62px; }
   .contact-card { grid-template-columns: 1fr; }
-  .contact-copy { padding: 35px 23px 5px; }
-  .contact-copy h2 { font-size: clamp(55px, 14vw, 72px); }
+  .contact-copy { padding: 36px 28px 5px; }
+  .contact-copy h2 { font-size: clamp(46px, 13vw, 66px); }
   .contact-copy > p:not(.eyebrow) { font-size: 13px; }
   .contact-actions { gap: 8px; }
   .contact-actions .button { min-height: 42px; padding-inline: 13px; font-size: 11px; }
