@@ -14,7 +14,7 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 88px; }
-body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+body { margin: 0; overflow-x: clip; background: var(--cream); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6; }
 a { color: inherit; }
 button { font: inherit; }
 .container { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
@@ -212,8 +212,61 @@ h1 em, h2 em { color: var(--violet); font-family: var(--hand); font-size: 1.16em
 .footer-socials a { display: grid; width: 32px; height: 32px; place-items: center; border: 1px solid rgba(21,21,21,.22); border-radius: 50%; font-size: 11px; font-weight: 700; text-decoration: none; }
 .footer-socials a:hover { background: var(--ink); color: var(--lime); }
 
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity .65s ease, transform .65s ease; }
-.reveal.is-visible { opacity: 1; transform: translateY(0); }
+/* ---------- Motion ----------
+   Only active when JS adds .motion to <html> (and the visitor allows motion),
+   so the page is fully visible without JS or with reduced motion.
+   Reveals use keyframes and the individual translate/rotate/scale properties,
+   so they never fight the hover transforms and transitions already on these elements. */
+:root { --ease-out: cubic-bezier(.22, 1, .36, 1); --ease-spring: cubic-bezier(.34, 1.45, .64, 1); }
+
+.motion .reveal:not(.is-visible) { opacity: 0; }
+.motion .reveal.is-visible { animation: rise .9s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 90ms); }
+@keyframes rise { from { opacity: 0; translate: 0 34px; filter: blur(8px); } }
+
+/* Titles: words rise one by one with a little tilt (replays on language change) */
+.wi { display: inline-block; }
+.motion .reveal:not(.is-visible) .wi { opacity: 0; }
+.motion .is-visible .wi { animation: word .85s var(--ease-out) both; animation-delay: calc(var(--wi, 0) * 55ms + 120ms); }
+@keyframes word { from { opacity: 0; translate: 0 .55em; rotate: 6deg; filter: blur(6px); } }
+
+/* Hero stickers settle in after the headline */
+.motion .hero-decor { animation: decor-in 1.3s var(--ease-spring) .55s both; }
+@keyframes decor-in { from { opacity: 0; scale: .86; rotate: -4deg; } }
+
+/* Project cards: card rises, then the image is uncovered upward while settling from a zoom */
+.motion .project-card.is-visible { animation: card-rise 1s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 120ms); }
+@keyframes card-rise { from { opacity: 0; translate: 0 64px; } }
+.motion .project-card:not(.is-visible) .project-visual { clip-path: inset(100% 0 0 0); }
+.motion .project-card.is-visible .project-visual { animation: unveil 1.15s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 120ms + 160ms); }
+@keyframes unveil { from { clip-path: inset(100% 0 0 0 round 18px); } to { clip-path: inset(0 0 0 0 round 0); } }
+.motion .project-card.is-visible .project-shot { animation: settle 1.6s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 120ms + 160ms); }
+@keyframes settle { from { scale: 1.22; } }
+.project-card.is-tilting { transition: transform .12s linear; }
+
+/* Process + tool cards are dealt onto the table, then settle with a small spring */
+.motion .process-card.is-visible, .motion .tool-card.is-visible { animation: deal .95s var(--ease-spring) both; animation-delay: calc(var(--i, 0) * 110ms + 180ms); }
+@keyframes deal { from { opacity: 0; translate: 0 72px; rotate: var(--tilt, -4deg); scale: .92; } 55% { opacity: 1; } }
+.motion .process-grid::before { transform: scaleX(0); transform-origin: left center; transition: transform 1.5s var(--ease-out); }
+.motion .process-grid.is-drawn::before { transform: scaleX(1); }
+
+/* About: the paper is placed like a sticker on top of a growing blob */
+.motion .about-art.is-visible { animation: none; }
+.motion .about-art.is-visible .about-pink-shape { animation: blob 1.2s var(--ease-out) both; }
+@keyframes blob { from { opacity: 0; scale: .35; } }
+.motion .about-art.is-visible .about-paper { animation: place 1.1s var(--ease-spring) .15s both; }
+@keyframes place { from { opacity: 0; translate: 50px -70px; rotate: 16deg; scale: 1.14; } 50% { opacity: 1; } }
+.motion .about-art.is-visible .about-spark { animation: pop .8s var(--ease-spring) .65s both; }
+.motion .about-art.is-visible .about-heart { animation: pop .8s var(--ease-spring) .8s both; }
+@keyframes pop { from { opacity: 0; scale: 0; rotate: -60deg; } }
+
+/* Contact: the pink card opens out of a rounded window */
+.motion .contact-card.is-visible { animation: open 1.25s var(--ease-out) both; }
+@keyframes open { from { opacity: 0; clip-path: inset(14% 12% round 60px); } 35% { opacity: 1; } to { clip-path: inset(0 round 22px); } }
+.motion .contact-card.is-visible .contact-ring { animation: pop 1s var(--ease-spring) .45s both; }
+
+/* Marquee is driven by JS (speed + lean follow the scroll) when motion is on */
+.motion .marquee-track.is-driven { animation: none; will-change: transform; }
+
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @keyframes twinkle-s { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.75); } }

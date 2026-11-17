@@ -39,6 +39,7 @@ languageButtons.forEach((button) => {
       const translation = translations[language][element.dataset.i18n];
       if (translation) element.innerHTML = translation;
     });
+    splitTitles();
     languageButtons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
   });
 });
@@ -57,16 +58,100 @@ navPanel.querySelectorAll("a").forEach((link) => {
   });
 });
 
-if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+/* ---------- Motion ---------- */
+const motionOn = document.documentElement.classList.contains("motion") && "IntersectionObserver" in window;
+
+// Wrap each word of the big titles in <span class="wi"> so they can rise one by one.
+// Runs again after a language switch, which replays the animation with the new words.
+function splitTitles() {
+  if (!motionOn) return;
+  document.querySelectorAll(".reveal h1[data-i18n], .reveal h2[data-i18n]").forEach((title) => {
+    let index = 0;
+    const walk = (node) => {
+      [...node.childNodes].forEach((child) => {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const parts = child.textContent.split(/(\s+)/);
+          if (!parts.some((part) => part.trim())) return;
+          const fragment = document.createDocumentFragment();
+          parts.forEach((part) => {
+            if (!part) return;
+            if (!part.trim()) { fragment.append(part); return; }
+            const word = document.createElement("span");
+            word.className = "wi";
+            word.style.setProperty("--wi", index++);
+            word.textContent = part;
+            fragment.append(word);
+          });
+          child.replaceWith(fragment);
+        } else if (child.nodeType === Node.ELEMENT_NODE && !child.classList.contains("wi")) {
+          walk(child);
+        }
+      });
+    };
+    walk(title);
+  });
+}
+
+if (motionOn) {
+  splitTitles();
+
+  // Stagger siblings, and give dealt cards alternating tilts
+  document.querySelectorAll(".reveal").forEach((element) => {
+    const siblings = [...element.parentElement.children].filter((item) => item.classList.contains("reveal"));
+    const position = siblings.indexOf(element);
+    element.style.setProperty("--i", position);
+    element.style.setProperty("--tilt", `${(position % 2 ? 1 : -1) * (3 + (position % 3))}deg`);
+  });
+
   const observer = new IntersectionObserver((entries, currentObserver) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        currentObserver.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add(entry.target.classList.contains("process-grid") ? "is-drawn" : "is-visible");
+      currentObserver.unobserve(entry.target);
     });
-  }, { threshold: 0.12 });
-  document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+  }, { threshold: 0.15, rootMargin: "0px 0px -6% 0px" });
+  document.querySelectorAll(".reveal, .process-grid").forEach((element) => observer.observe(element));
+
+  // Marquee: steady drift that speeds up, follows the scroll direction and leans a little while you scroll
+  const track = document.querySelector(".marquee-track");
+  if (track) {
+    track.classList.add("is-driven");
+    let offset = 0, boost = 0, direction = 1, lastTime = performance.now(), lastScroll = window.scrollY, running = false;
+    const tick = (now) => {
+      const delta = Math.min(now - lastTime, 50);
+      lastTime = now;
+      const scrolled = window.scrollY - lastScroll;
+      lastScroll = window.scrollY;
+      if (scrolled) direction = scrolled > 0 ? 1 : -1;
+      boost += (Math.min(Math.abs(scrolled), 90) - boost) * 0.08;
+      const half = track.scrollWidth / 2;
+      offset += (half / 45000 + boost * 0.012) * delta * direction;
+      offset = ((offset % half) + half) % half;
+      track.style.transform = `translateX(${-offset}px) skewX(${-Math.min(boost * 0.09, 5) * direction}deg)`;
+      if (running) requestAnimationFrame(tick);
+    };
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !running) { running = true; lastTime = performance.now(); lastScroll = window.scrollY; requestAnimationFrame(tick); }
+      else if (!entry.isIntersecting) running = false;
+    }).observe(track.parentElement);
+  }
+
+  // Project cards lean slightly toward the pointer (mouse/trackpad only)
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    document.querySelectorAll(".project-card").forEach((card) => {
+      card.addEventListener("pointermove", (event) => {
+        const box = card.getBoundingClientRect();
+        const x = (event.clientX - box.left) / box.width - 0.5;
+        const y = (event.clientY - box.top) / box.height - 0.5;
+        card.classList.add("is-tilting");
+        card.style.transform = `perspective(1000px) translateY(-6px) rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg)`;
+      });
+      card.addEventListener("pointerleave", () => {
+        card.classList.remove("is-tilting");
+        card.style.transform = "";
+      });
+    });
+  }
 } else {
   document.querySelectorAll(".reveal").forEach((element) => element.classList.add("is-visible"));
 }
