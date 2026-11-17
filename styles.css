@@ -311,12 +311,12 @@ h1 em, h2 em { color: var(--violet); font-family: var(--hand); font-size: 1.16em
   html { scroll-padding-top: 68px; }
   .container { width: calc(100% - 48px); }
   .section-pad { padding-block: 66px; }
-  .hero { padding-top: 35px; padding-bottom: 27px; }
+  .hero { padding-top: 35px; padding-bottom: 40px; }
   .hero-grid { min-height: 0; padding-top: 70px; }
   .orbit-sticker { width: 78px; height: 78px; right: -4px; }
   .orbit-sticker > span { font-size: 22px; }
   .hero-decor .hand-note { display: none; }
-  .hand-note-mobile { display: block; right: -2px; bottom: 2px; max-width: 76px; font-size: 19px; line-height: .95; text-align: center; }
+  .hand-note-mobile { display: block; right: -6px; bottom: 44px; max-width: 76px; font-size: 19px; line-height: .95; text-align: center; }
   .sparkle-one { display: none; }
   .sparkle-two { top: 27%; right: 0; font-size: 24px; }
   .sparkle-three { bottom: 2%; left: 6%; }
@@ -327,12 +327,13 @@ h1 em, h2 em { color: var(--violet); font-family: var(--hand); font-size: 1.16em
   .hero-intro { max-width: 420px; font-size: 15px; }
   .hero-actions { gap: 19px; }
   .button { min-height: 48px; padding-inline: 18px; font-size: 13px; }
-  .hero-chips { gap: 7px; margin-top: 22px; }
+  .hero-chips { display: grid; grid-template-columns: auto auto; justify-content: center; gap: 9px 7px; margin-top: 24px; }
+  .hero-chips .chip-feature { grid-column: 1 / -1; justify-self: center; margin-bottom: 2px; }
   .hero-chips span { padding: 6px 9px; font-size: 9px; }
   .hero-chips .chip-feature { padding: 8px 12px 8px 26px; font-size: 11px; }
   .hero-chips .chip-feature::before { left: 10px; }
   .sun-doodle { top: 2%; left: 30%; font-size: 30px; }
-  .hero-bottom { margin-top: 2px; font-size: 8px; }
+  .hero-bottom { margin-top: 34px; font-size: 8px; }
   .marquee { padding-block: 10px; }
   .marquee-track span { font-size: 17px; }
   .section-heading { display: block; margin-bottom: 28px; }
@@ -366,11 +367,11 @@ h1 em, h2 em { color: var(--violet); font-family: var(--hand); font-size: 1.16em
   .contact-copy > p:not(.eyebrow) { font-size: 13px; }
   .contact-actions { gap: 8px; }
   .contact-actions .button { min-height: 42px; padding-inline: 13px; font-size: 11px; }
-  .contact-art { min-height: 245px; }
-  .contact-blob { left: 42%; width: 220px; height: 220px; }
-  .contact-ring { left: 40%; width: 170px; height: 170px; }
+  .contact-art { min-height: 350px; }
+  .contact-blob { top: 43%; left: 50%; width: 220px; height: 220px; }
+  .contact-ring { top: 41%; left: 50%; width: 170px; height: 170px; }
   .contact-ring > span { font-size: 46px; }
-  .contact-note { right: 10%; bottom: 8%; font-size: 21px; }
+  .contact-note { right: 9%; bottom: 9%; font-size: 21px; }
   .contact-star { top: 8%; right: 13%; font-size: 30px; }
   .site-footer { padding-block: 20px; }
   .footer-inner { flex-wrap: wrap; justify-content: space-between; }
