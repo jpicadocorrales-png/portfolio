@@ -21,9 +21,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Caveat:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=9">
+    <link rel="stylesheet" href="styles.css?v=10">
     <script>try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("motion"); } catch (e) {}</script>
-    <script src="app.js?v=9" defer></script>
+    <script src="app.js?v=10" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
@@ -53,6 +53,7 @@
           </div>
         </div>
       </nav>
+      <div class="cs-progress" aria-hidden="true"><span></span></div>
     </header>
 
     <main id="main">
@@ -108,7 +109,7 @@
 
           <div class="cs-compare reveal" data-compare>
             <div class="cs-compare-bar">
-              <div class="cs-toggle" role="group" aria-label="Compare before and after" data-i18n-aria="csCompare">
+              <div class="cs-toggle" data-current="before" role="group" aria-label="Compare before and after" data-i18n-aria="csCompare">
                 <button type="button" aria-pressed="true" data-show="before" data-i18n="csBefore">Before</button>
                 <button type="button" aria-pressed="false" data-show="after" data-i18n="csAfter">After</button>
               </div>
@@ -211,8 +212,8 @@
             </div>
           </div>
 
-          <div class="cs-sequence reveal">
-            <div class="cs-step-shot">
+          <div class="cs-sequence">
+            <div class="cs-step-shot reveal">
               <p class="cs-chip" data-i18n="csKindaOverviewLabel">After · Overview</p>
               <div class="cs-frame" data-annotated="kinda-overview">
                 <button class="cs-zoom" type="button"><span class="sr-only" data-i18n="csEnlarge">Open larger image:</span><img src="assets/case-studies/kinda-overview-after.png" alt="Kinda Overview after: the pattern card now lives here, showing one pattern at a time." data-i18n-alt="csKindaOverviewAlt" width="1280" height="767" loading="lazy"></button>
@@ -224,8 +225,8 @@
                 <li id="kinda-overview-2" data-note="2"><span class="cs-note-num" aria-hidden="true">2</span><span data-i18n="csKindaO2">Opens Insights right at the patterns list.</span></li>
               </ol>
             </div>
-            <div class="cs-connector"><span data-i18n="csSeeAll">See all patterns</span><span class="cs-connector-arrow" aria-hidden="true">→</span></div>
-            <div class="cs-step-shot">
+            <div class="cs-connector reveal"><span data-i18n="csSeeAll">See all patterns</span><span class="cs-connector-arrow" aria-hidden="true">→</span></div>
+            <div class="cs-step-shot reveal">
               <p class="cs-chip" data-i18n="csKindaInsightsLabel">After · Insights</p>
               <div class="cs-frame" data-annotated="kinda-insights">
                 <button class="cs-zoom" type="button"><span class="sr-only" data-i18n="csEnlarge">Open larger image:</span><img src="assets/case-studies/kinda-insights-after.png" alt="Kinda Insights page after: weekly consistency at full width and a larger patterns section." data-i18n-alt="csKindaInsightsAlt" width="1280" height="996" loading="lazy"></button>

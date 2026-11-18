@@ -213,7 +213,10 @@ document.querySelectorAll("[data-compare]").forEach((compare) => {
   const buttons = compare.querySelectorAll("[data-show]");
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
+      if (button.getAttribute("aria-pressed") === "true") return;
       buttons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+      button.parentElement.dataset.current = button.dataset.show;
+      compare.classList.add("has-toggled");
       compare.querySelectorAll("[data-state]").forEach((element) => {
         const isOn = element.dataset.state === button.dataset.show;
         if (element.classList.contains("cs-state")) element.classList.toggle("is-active", isOn);
@@ -239,4 +242,28 @@ if (lightbox) {
   lightbox.querySelector(".cs-lightbox-close").addEventListener("click", () => lightbox.close());
   lightbox.addEventListener("click", (event) => { if (event.target === lightbox) lightbox.close(); });
   lightbox.addEventListener("close", () => document.documentElement.classList.remove("has-lightbox"));
+}
+
+// Reading progress under the header, and a slight drift on the big case numbers
+const progressBar = document.querySelector(".cs-progress span");
+if (progressBar) {
+  const numbers = [...document.querySelectorAll(".cs-num")];
+  const wideScreen = window.matchMedia("(min-width: 901px)");
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.transform = `scaleX(${scrollable > 0 ? Math.min(window.scrollY / scrollable, 1) : 0})`;
+    if (!motionOn) return;
+    numbers.forEach((number) => {
+      if (!wideScreen.matches) { number.style.transform = ""; return; }
+      const box = number.getBoundingClientRect();
+      const fromCenter = box.top + box.height / 2 - window.innerHeight / 2;
+      number.style.transform = `translateY(${Math.max(-28, Math.min(28, fromCenter * 0.07)).toFixed(1)}px)`;
+    });
+  };
+  const requestUpdate = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+  update();
 }
