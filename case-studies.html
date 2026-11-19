@@ -21,9 +21,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Caveat:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=10">
+    <link rel="stylesheet" href="styles.css?v=11">
     <script>try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("motion"); } catch (e) {}</script>
-    <script src="app.js?v=10" defer></script>
+    <script src="app.js?v=11" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
@@ -49,7 +49,7 @@
               <span aria-hidden="true">/</span>
               <button type="button" lang="pt" aria-pressed="false" data-lang="pt">PT</button>
             </div>
-            <a class="button button-dark button-small cv-link" href="mailto:jpicadocorrales@gmail.com?subject=CV%20request" aria-label="Request Jazmín's CV by email" data-i18n="requestCv">Request CV</a>
+            <button class="button button-dark button-small cv-link" type="button" aria-haspopup="dialog" data-cv-open data-i18n="requestCv">Download CV</button>
           </div>
         </div>
       </nav>
@@ -272,6 +272,16 @@
     <dialog class="cs-lightbox">
       <button class="cs-lightbox-close" type="button" aria-label="Close image" data-i18n-aria="csClose">×</button>
       <img src="data:," alt="">
+    </dialog>
+    <dialog class="cv-dialog" aria-labelledby="cv-title">
+      <button class="cv-close" type="button" aria-label="Close" data-i18n-aria="cvClose">×</button>
+      <p class="eyebrow"><span class="eyebrow-dot"></span><span data-i18n="cvEyebrow">DOWNLOAD CV</span></p>
+      <h2 id="cv-title" data-i18n="cvTitle">Which <em>language</em>?</h2>
+      <p class="cv-text" data-i18n="cvText">Pick the version you prefer. Both are the same two-page PDF.</p>
+      <div class="cv-options">
+        <a class="cv-option" href="assets/cv/Jazmin-Picado-Corrales-CV-EN.pdf" download lang="en"><span class="cv-flag" aria-hidden="true">EN</span><span class="cv-option-name"><strong>English</strong><small>PDF · 55 KB</small></span><span class="cv-option-icon" aria-hidden="true">↓</span></a>
+        <a class="cv-option" href="assets/cv/Jazmin-Picado-Corrales-CV-ES.pdf" download lang="es"><span class="cv-flag" aria-hidden="true">ES</span><span class="cv-option-name"><strong>Español</strong><small>PDF · 57 KB</small></span><span class="cv-option-icon" aria-hidden="true">↓</span></a>
+      </div>
     </dialog>
   </body>
 </html>
